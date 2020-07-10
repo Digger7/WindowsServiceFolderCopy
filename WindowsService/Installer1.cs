@@ -22,7 +22,7 @@ namespace WindowsServicGuard
             serviceInstaller = new ServiceInstaller();
             processInstaller = new ServiceProcessInstaller();
 
-            processInstaller.Account = ServiceAccount.LocalSystem;
+            processInstaller.Account = ServiceAccount.User;
             serviceInstaller.StartType = ServiceStartMode.Automatic;
             serviceInstaller.ServiceName = "GuardService";
             serviceInstaller.DisplayName = "СТРАЖ копирование видео";

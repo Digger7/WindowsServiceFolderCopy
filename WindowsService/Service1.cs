@@ -9,13 +9,15 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
+using System.Windows.Threading;
 
 namespace WindowsServiceGuard
 
 {
     public partial class Service1 : ServiceBase
     {
-        Logger logger;
+        Сopyist copyist;
         public Service1()
         {
             InitializeComponent();
@@ -26,85 +28,42 @@ namespace WindowsServiceGuard
 
         protected override void OnStart(string[] args)
         {
-            logger = new Logger();
-            Thread loggerThread = new Thread(new ThreadStart(logger.Start));
+            copyist = new Сopyist();
+            Thread loggerThread = new Thread(new ThreadStart(copyist.Start));
             loggerThread.Start();
         }
 
         protected override void OnStop()
         {
-            logger.Stop();
-            Thread.Sleep(1000);
+
         }
     }
 
-    class Logger
+    class Сopyist
     {
-        FileSystemWatcher watcher;
-        object obj = new object();
-        bool enabled = true;
-        public Logger()
+        public Сopyist()
         {
-            watcher = new FileSystemWatcher("C:\\!del\\tmp");
-            watcher.Deleted += Watcher_Deleted;
-            watcher.Created += Watcher_Created;
-            watcher.Changed += Watcher_Changed;
-            watcher.Renamed += Watcher_Renamed;
+
         }
 
         public void Start()
         {
-            watcher.EnableRaisingEvents = true;
-            while (enabled)
-            {
-                Thread.Sleep(1000);
-            }
-        }
-        public void Stop()
-        {
-            watcher.EnableRaisingEvents = false;
-            enabled = false;
-        }
-        // переименование файлов
-        private void Watcher_Renamed(object sender, RenamedEventArgs e)
-        {
-            string fileEvent = "переименован в " + e.FullPath;
-            string filePath = e.OldFullPath;
-            RecordEntry(fileEvent, filePath);
-        }
-        // изменение файлов
-        private void Watcher_Changed(object sender, FileSystemEventArgs e)
-        {
-            string fileEvent = "изменен";
-            string filePath = e.FullPath;
-            RecordEntry(fileEvent, filePath);
-        }
-        // создание файлов
-        private void Watcher_Created(object sender, FileSystemEventArgs e)
-        {
-            string fileEvent = "создан";
-            string filePath = e.FullPath;
-            RecordEntry(fileEvent, filePath);
-        }
-        // удаление файлов
-        private void Watcher_Deleted(object sender, FileSystemEventArgs e)
-        {
-            string fileEvent = "удален";
-            string filePath = e.FullPath;
-            RecordEntry(fileEvent, filePath);
+            System.Timers.Timer aTimer = new System.Timers.Timer();
+            aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+            aTimer.Interval = 5000;
+            aTimer.Enabled = true;
         }
 
-        private void RecordEntry(string fileEvent, string filePath)
+        private static void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-            lock (obj)
+            string[] dirs = Directory.GetFiles(@"\\RONPP-S-FS10\video$", "*");
+            string list = "";
+            foreach (string dir in dirs)
             {
-                using (StreamWriter writer = new StreamWriter("c:\\!del\\templog.txt", true))
-                {
-                    writer.WriteLine(String.Format("{0} файл {1} был {2}",
-                        DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss"), filePath, fileEvent));
-                    writer.Flush();
-                }
+                list += dir + Environment.NewLine;
             }
+
+            File.WriteAllText("c:\\!del\\templog.txt", list);
         }
     }
 }
