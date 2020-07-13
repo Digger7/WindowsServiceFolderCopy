@@ -47,16 +47,49 @@ namespace WindowsServiceGuard
 
         }
 
+        private static SqlConnection Connection()
+        {
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Database.mdf"); ;
+            return new SqlConnection($"Data Source = (LocalDB)\\MSSQLLocalDB; AttachDbFilename = {path}; Integrated Security = True");
+        }
+
         public void Start()
         {
             System.Timers.Timer aTimer = new System.Timers.Timer();
             aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
-            aTimer.Interval = 5000;
+            aTimer.Interval = Convert.ToDouble(GetSettingValue("Interval"));
             aTimer.Enabled = true;
+        }
+
+        private object GetSettingValue(string name)
+        {
+            try
+            {
+                using (var conn = Connection())
+                {
+                    conn.Open();
+                    SqlCommand cmd = conn.CreateCommand();
+                    cmd.CommandText = $"SELECT Value FROM Settings WHERE Name = @Name";
+                    cmd.Parameters.Add("@Name", SqlDbType.NVarChar).Value = name;
+                    SqlDataReader myReader = cmd.ExecuteReader();
+                    string _result = "";
+                    while (myReader.Read())
+                    {
+                        _result = myReader["Value"].ToString();
+                    }
+                    return _result;
+                }
+            }
+            catch (Exception ex)
+            {
+                //File.WriteAllText("c:\\!del\\templog.txt", ex.Message);
+                return null;
+            }
         }
 
         private static void OnTimedEvent(object source, ElapsedEventArgs e)
         {
+            #region example
             //string[] dirs = Directory.GetFiles(@"\\RONPP-S-FS10\video$", "*");
             //string list = "";
             //foreach (string dir in dirs)
@@ -65,28 +98,54 @@ namespace WindowsServiceGuard
             //}
             //File.WriteAllText("c:\\!del\\templog.txt", list);
 
+
+            //try
+            //{
+            //    using (var conn = Connection())
+            //    {
+            //        conn.Open();
+            //        SqlCommand cmd = conn.CreateCommand();
+            //        cmd.CommandText = "SELECT Id, Source FROM Source WHERE Id <> @Id";
+            //        cmd.Parameters.Add("@Id", SqlDbType.Int).Value = 0;
+            //        SqlDataReader myReader = cmd.ExecuteReader();
+            //        string _result = "";
+            //        while (myReader.Read())
+            //        {
+            //            _result += String.Format("Id: {0}; Source: {1} | ", myReader["Id"].ToString(), myReader["Source"].ToString())+Environment.NewLine;
+            //        }
+            //        File.WriteAllText("c:\\!del\\templog.txt", _result);
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    File.WriteAllText("c:\\!del\\templog.txt", ex.Message);
+            //}
+            #endregion
+
             try
             {
-                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Database.mdf");
-                using (var conn = new SqlConnection($"Data Source = (LocalDB)\\MSSQLLocalDB; AttachDbFilename = {path}; Integrated Security = True"))
+                using (var conn = Connection())
                 {
                     conn.Open();
                     SqlCommand cmd = conn.CreateCommand();
-                    cmd.CommandText = "SELECT Id, Source FROM Source WHERE Id <> @Id";
-                    cmd.Parameters.Add("@Id", SqlDbType.Int).Value = 0;
+                    cmd.CommandText = "SELECT Id, Source, Destination, Mask FROM Path";
                     SqlDataReader myReader = cmd.ExecuteReader();
-                    string _result = "";
                     while (myReader.Read())
                     {
-                        _result += String.Format("Id: {0}; Source: {1} | ", myReader["Id"].ToString(), myReader["Source"].ToString())+Environment.NewLine;
+                        string[] files = Directory.GetFiles(myReader["Source"].ToString(), myReader["Mask"].ToString());
+                        foreach (string file in files)
+                        {
+                            File.Copy(file, Path.Combine(myReader["Destination"].ToString(), Path.GetFileName(file)), true);
+                        }
                     }
-                    File.WriteAllText("c:\\!del\\templog.txt", _result);
+                    //File.WriteAllText("c:\\!del\\templog.txt", _result);
                 }
             }
             catch (Exception ex)
             {
                 File.WriteAllText("c:\\!del\\templog.txt", ex.Message);
             }
+
         }
     }
 }
