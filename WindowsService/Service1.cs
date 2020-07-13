@@ -78,7 +78,7 @@ namespace WindowsServiceGuard
                     string _result = "";
                     while (myReader.Read())
                     {
-                        _result += String.Format("Id: {0}; Source: {1} | ", myReader["Id"].ToString(), myReader["Source"].ToString());
+                        _result += String.Format("Id: {0}; Source: {1} | ", myReader["Id"].ToString(), myReader["Source"].ToString())+Environment.NewLine;
                     }
                     File.WriteAllText("c:\\!del\\templog.txt", _result);
                 }
