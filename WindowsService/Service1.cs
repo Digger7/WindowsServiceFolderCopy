@@ -61,7 +61,7 @@ namespace WindowsServiceGuard
             aTimer.Enabled = true;
         }
 
-        private object GetSettingValue(string name)
+        private static string GetSettingValue(string name)
         {
             try
             {
@@ -129,25 +129,49 @@ namespace WindowsServiceGuard
                     conn.Open();
                     SqlCommand cmd = conn.CreateCommand();
                     cmd.CommandText = "SELECT Id, Source, Destination, Mask FROM Path";
-                    SqlDataReader myReader = cmd.ExecuteReader();
-                    while (myReader.Read())
-                    {
-                        string[] files = Directory.GetFiles(myReader["Source"].ToString(), myReader["Mask"].ToString());
+                    SqlDataReader pathReader = cmd.ExecuteReader();
+                    while (pathReader.Read())
+                    {// Поиск файлов в каталогах источниках и копирование их на ресурс назначения
+                        string[] files = Directory.GetFiles(pathReader["Source"].ToString(), pathReader["Mask"].ToString());
                         foreach (string file in files)
                         {
-                                string destFileName = Path.Combine(myReader["Destination"].ToString(), Path.GetFileName(file));
-                                File.Copy(file, destFileName, true);
-                                //SqlCommand insertCmd = new SqlCommand("INSERT INTO Files (Date, Path) values (@Date, @Path);", conn);
-                                //cmd.Parameters.Add("@Path", SqlDbType.NVarChar).Value = destFileName;
-                                //var result = cmd.ExecuteNonQuery();
+                            using (var checkConn = Connection()) {
+                                checkConn.Open();
+                                SqlCommand checkCmd = checkConn.CreateCommand();
+                                checkCmd.CommandText = "SELECT Id FROM Files WHERE Path=@Path";
+                                string destFileName = Path.Combine(pathReader["Destination"].ToString(), Path.GetFileName(file));
+                                checkCmd.Parameters.Add("@Path", SqlDbType.NVarChar).Value = destFileName;
+                                SqlDataReader checkReader = checkCmd.ExecuteReader();
+                                if (!checkReader.HasRows)
+                                { // Если файл не был ранее скопирован
+                                    File.Copy(file, destFileName, true); // Выполняется копирование
+                                    //И заносится информация об этом в БД
+                                    checkReader.Close();
+                                    SqlCommand insertCmd = new SqlCommand("INSERT INTO Files (Date, Path) values (GETDATE(), @Path);", checkConn);
+                                    insertCmd.Parameters.Add("@Path", SqlDbType.NVarChar).Value = destFileName;
+                                    var result = insertCmd.ExecuteNonQuery();
+                                }
+                            }
+
                         }
                     }
-                    //File.WriteAllText("c:\\!del\\templog.txt", _result);
+                    pathReader.Close();
+                    //cmd.CommandText = "SELECT Id, Date, Path FROM Files WHERE Date<DATEADD(second,@DayCount*-1,GETDATE())";
+                    cmd.CommandText = "SELECT Id, Date, Path FROM Files WHERE Date<DATEADD(day,@DayCount*-1,GETDATE())";
+                    //cmd.Parameters.Add("@DayCount", SqlDbType.Int).Value = 90;
+                    cmd.Parameters.Add("@DayCount", SqlDbType.Int).Value = Convert.ToInt32(GetSettingValue("StoragePerioInDays"));
+                    SqlDataReader filesReader = cmd.ExecuteReader();
+                    while (filesReader.Read())
+                    {
+                        //Удаление файлов с истекшим сроком хранения
+                        File.Delete(filesReader["Path"].ToString());
+                    }
                 }
             }
             catch (Exception ex)
             {
-                File.WriteAllText("c:\\!del\\templog.txt", ex.Message);
+                string logfile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "error.log");
+                File.WriteAllText(logfile, ex.Message);
             }
 
         }
