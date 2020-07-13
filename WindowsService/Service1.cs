@@ -135,7 +135,11 @@ namespace WindowsServiceGuard
                         string[] files = Directory.GetFiles(myReader["Source"].ToString(), myReader["Mask"].ToString());
                         foreach (string file in files)
                         {
-                            File.Copy(file, Path.Combine(myReader["Destination"].ToString(), Path.GetFileName(file)), true);
+                                string destFileName = Path.Combine(myReader["Destination"].ToString(), Path.GetFileName(file));
+                                File.Copy(file, destFileName, true);
+                                //SqlCommand insertCmd = new SqlCommand("INSERT INTO Files (Date, Path) values (@Date, @Path);", conn);
+                                //cmd.Parameters.Add("@Path", SqlDbType.NVarChar).Value = destFileName;
+                                //var result = cmd.ExecuteNonQuery();
                         }
                     }
                     //File.WriteAllText("c:\\!del\\templog.txt", _result);
