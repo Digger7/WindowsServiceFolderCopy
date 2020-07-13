@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -56,14 +57,36 @@ namespace WindowsServiceGuard
 
         private static void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-            string[] dirs = Directory.GetFiles(@"\\RONPP-S-FS10\video$", "*");
-            string list = "";
-            foreach (string dir in dirs)
-            {
-                list += dir + Environment.NewLine;
-            }
+            //string[] dirs = Directory.GetFiles(@"\\RONPP-S-FS10\video$", "*");
+            //string list = "";
+            //foreach (string dir in dirs)
+            //{
+            //    list += dir + Environment.NewLine;
+            //}
+            //File.WriteAllText("c:\\!del\\templog.txt", list);
 
-            File.WriteAllText("c:\\!del\\templog.txt", list);
+            try
+            {
+                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Database.mdf");
+                using (var conn = new SqlConnection($"Data Source = (LocalDB)\\MSSQLLocalDB; AttachDbFilename = {path}; Integrated Security = True"))
+                {
+                    conn.Open();
+                    SqlCommand cmd = conn.CreateCommand();
+                    cmd.CommandText = "SELECT Id, Source FROM Source WHERE Id <> @Id";
+                    cmd.Parameters.Add("@Id", SqlDbType.Int).Value = 0;
+                    SqlDataReader myReader = cmd.ExecuteReader();
+                    string _result = "";
+                    while (myReader.Read())
+                    {
+                        _result += String.Format("Id: {0}; Source: {1} | ", myReader["Id"].ToString(), myReader["Source"].ToString());
+                    }
+                    File.WriteAllText("c:\\!del\\templog.txt", _result);
+                }
+            }
+            catch (Exception ex)
+            {
+                File.WriteAllText("c:\\!del\\templog.txt", ex.Message);
+            }
         }
     }
 }
