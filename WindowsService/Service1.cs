@@ -147,7 +147,7 @@ namespace WindowsServiceGuard
                                     File.Copy(file, destFileName, true); // Выполняется копирование
                                     //И заносится информация об этом в БД
                                     checkReader.Close();
-                                    SqlCommand insertCmd = new SqlCommand("INSERT INTO Files (Date, Path) values (GETDATE(), @Path);", checkConn);
+                                    SqlCommand insertCmd = new SqlCommand("INSERT INTO Files (DateCreate, Path) values (GETDATE(), @Path);", checkConn);
                                     insertCmd.Parameters.Add("@Path", SqlDbType.NVarChar).Value = destFileName;
                                     var result = insertCmd.ExecuteNonQuery();
                                 }
@@ -156,9 +156,8 @@ namespace WindowsServiceGuard
                         }
                     }
                     pathReader.Close();
-                    //cmd.CommandText = "SELECT Id, Date, Path FROM Files WHERE Date<DATEADD(second,@DayCount*-1,GETDATE())";
-                    cmd.CommandText = "SELECT Id, Date, Path FROM Files WHERE Date<DATEADD(day,@DayCount*-1,GETDATE())";
-                    //cmd.Parameters.Add("@DayCount", SqlDbType.Int).Value = 90;
+                    cmd.CommandText = "SELECT Id, DateCreate, Path FROM Files WHERE DateCreate<DATEADD(second,@DayCount*-1,GETDATE())";
+                    //cmd.CommandText = "SELECT Id, DateCreate, Path FROM Files WHERE DateCreate<DATEADD(day,@DayCount*-1,GETDATE())";
                     cmd.Parameters.Add("@DayCount", SqlDbType.Int).Value = Convert.ToInt32(GetSettingValue("StoragePerioInDays"));
                     SqlDataReader filesReader = cmd.ExecuteReader();
                     while (filesReader.Read())
