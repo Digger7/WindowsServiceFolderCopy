@@ -57,7 +57,7 @@ namespace WindowsServiceGuard
         {
             System.Timers.Timer aTimer = new System.Timers.Timer();
             aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
-            aTimer.Interval = Convert.ToDouble(GetSettingValue("Interval"));
+            aTimer.Interval = Convert.ToDouble(GetSettingValue("Interval"))*3600000;
             aTimer.Enabled = true;
         }
 
@@ -156,8 +156,8 @@ namespace WindowsServiceGuard
                         }
                     }
                     pathReader.Close();
-                    cmd.CommandText = "SELECT Id, DateCreate, Path FROM Files WHERE DateCreate<DATEADD(second,@DayCount*-1,GETDATE())";
-                    //cmd.CommandText = "SELECT Id, DateCreate, Path FROM Files WHERE DateCreate<DATEADD(day,@DayCount*-1,GETDATE())";
+                    //cmd.CommandText = "SELECT Id, DateCreate, Path FROM Files WHERE DateCreate<DATEADD(second,@DayCount*-1,GETDATE())";
+                    cmd.CommandText = "SELECT Id, DateCreate, Path FROM Files WHERE DateCreate<DATEADD(day,@DayCount*-1,GETDATE())";
                     cmd.Parameters.Add("@DayCount", SqlDbType.Int).Value = Convert.ToInt32(GetSettingValue("StoragePerioInDays"));
                     SqlDataReader filesReader = cmd.ExecuteReader();
                     while (filesReader.Read())
