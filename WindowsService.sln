@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29911.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsServiceGuard", "WindowsService\WindowsServiceGuard.csproj", "{42FD5FD9-CB3D-4150-98AC-402994E99F25}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configurator", "Configurator\Configurator.csproj", "{B19CC5A1-FA15-40B7-8DE7-7FD09AB5F294}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{42FD5FD9-CB3D-4150-98AC-402994E99F25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42FD5FD9-CB3D-4150-98AC-402994E99F25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42FD5FD9-CB3D-4150-98AC-402994E99F25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B19CC5A1-FA15-40B7-8DE7-7FD09AB5F294}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B19CC5A1-FA15-40B7-8DE7-7FD09AB5F294}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B19CC5A1-FA15-40B7-8DE7-7FD09AB5F294}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B19CC5A1-FA15-40B7-8DE7-7FD09AB5F294}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

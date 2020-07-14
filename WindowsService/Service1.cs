@@ -164,6 +164,14 @@ namespace WindowsServiceGuard
                     {
                         //Удаление файлов с истекшим сроком хранения
                         File.Delete(filesReader["Path"].ToString());
+                        using (var updateConn = Connection())
+                        {
+                            updateConn.Open();
+                            SqlCommand updateCmd = updateConn.CreateCommand();
+                            updateCmd.CommandText = "UPDATE Files SET DateDelete=GETDATE() WHERE Id=@Id;";
+                            updateCmd.Parameters.Add("@Id", SqlDbType.Int).Value = filesReader["Id"].ToString();
+                            updateCmd.ExecuteNonQuery();
+                        }
                     }
                 }
             }
