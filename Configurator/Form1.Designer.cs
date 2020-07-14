@@ -53,12 +53,18 @@
             this.destinationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.maskDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.numericUpDownInterval = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownPeriod = new System.Windows.Forms.NumericUpDown();
+            this.labelInterval = new System.Windows.Forms.Label();
+            this.labelPeriod = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.databaseDataSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pathBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).BeginInit();
             this.bindingNavigator1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInterval)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPeriod)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -265,11 +271,57 @@
             this.groupDataGridViewTextBoxColumn.HeaderText = "Группа";
             this.groupDataGridViewTextBoxColumn.Name = "groupDataGridViewTextBoxColumn";
             // 
+            // numericUpDownInterval
+            // 
+            this.numericUpDownInterval.Location = new System.Drawing.Point(224, 6);
+            this.numericUpDownInterval.Maximum = new decimal(new int[] {
+            1874919423,
+            2328306,
+            0,
+            0});
+            this.numericUpDownInterval.Name = "numericUpDownInterval";
+            this.numericUpDownInterval.Size = new System.Drawing.Size(120, 20);
+            this.numericUpDownInterval.TabIndex = 2;
+            // 
+            // numericUpDownPeriod
+            // 
+            this.numericUpDownPeriod.Location = new System.Drawing.Point(540, 6);
+            this.numericUpDownPeriod.Maximum = new decimal(new int[] {
+            1874919423,
+            2328306,
+            0,
+            0});
+            this.numericUpDownPeriod.Name = "numericUpDownPeriod";
+            this.numericUpDownPeriod.Size = new System.Drawing.Size(120, 20);
+            this.numericUpDownPeriod.TabIndex = 3;
+            // 
+            // labelInterval
+            // 
+            this.labelInterval.AutoSize = true;
+            this.labelInterval.Location = new System.Drawing.Point(96, 9);
+            this.labelInterval.Name = "labelInterval";
+            this.labelInterval.Size = new System.Drawing.Size(126, 13);
+            this.labelInterval.TabIndex = 4;
+            this.labelInterval.Text = "Интервал запуска (час)";
+            // 
+            // labelPeriod
+            // 
+            this.labelPeriod.AutoSize = true;
+            this.labelPeriod.Location = new System.Drawing.Point(368, 9);
+            this.labelPeriod.Name = "labelPeriod";
+            this.labelPeriod.Size = new System.Drawing.Size(169, 13);
+            this.labelPeriod.TabIndex = 5;
+            this.labelPeriod.Text = "Период хранения файлов (дней)";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 462);
+            this.Controls.Add(this.labelPeriod);
+            this.Controls.Add(this.labelInterval);
+            this.Controls.Add(this.numericUpDownPeriod);
+            this.Controls.Add(this.numericUpDownInterval);
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.panel1);
             this.MinimumSize = new System.Drawing.Size(800, 500);
@@ -285,7 +337,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).EndInit();
             this.bindingNavigator1.ResumeLayout(false);
             this.bindingNavigator1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInterval)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPeriod)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -314,6 +369,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn destinationDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn maskDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn groupDataGridViewTextBoxColumn;
+        private System.Windows.Forms.NumericUpDown numericUpDownInterval;
+        private System.Windows.Forms.NumericUpDown numericUpDownPeriod;
+        private System.Windows.Forms.Label labelInterval;
+        private System.Windows.Forms.Label labelPeriod;
     }
 }
 

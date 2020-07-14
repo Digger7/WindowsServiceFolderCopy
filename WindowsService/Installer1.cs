@@ -23,8 +23,8 @@ namespace WindowsServicGuard
             processInstaller = new ServiceProcessInstaller();
 
             processInstaller.Account = ServiceAccount.User;
-            processInstaller.Username = "vdnpp\\kiselyev-ya";
-            processInstaller.Password = "Gfhflbuvf78";
+            //processInstaller.Username = "vdnpp\\kiselyev-ya";
+            //processInstaller.Password = "Gfhflbuvf78";
             serviceInstaller.StartType = ServiceStartMode.Automatic;
             serviceInstaller.ServiceName = "GuardService";
             serviceInstaller.DisplayName = "СТРАЖ копирование видео";
