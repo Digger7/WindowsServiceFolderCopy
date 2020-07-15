@@ -285,8 +285,6 @@ namespace Configurator {
             
             private global::System.Data.DataColumn columnDestination;
             
-            private global::System.Data.DataColumn columnMask;
-            
             private global::System.Data.DataColumn columnGroup;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -348,14 +346,6 @@ namespace Configurator {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn MaskColumn {
-                get {
-                    return this.columnMask;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public global::System.Data.DataColumn GroupColumn {
                 get {
                     return this.columnGroup;
@@ -399,13 +389,12 @@ namespace Configurator {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public PathRow AddPathRow(string Source, string Destination, string Mask, string Group) {
+            public PathRow AddPathRow(string Source, string Destination, string Group) {
                 PathRow rowPathRow = ((PathRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
                         Source,
                         Destination,
-                        Mask,
                         Group};
                 rowPathRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowPathRow);
@@ -439,7 +428,6 @@ namespace Configurator {
                 this.columnId = base.Columns["Id"];
                 this.columnSource = base.Columns["Source"];
                 this.columnDestination = base.Columns["Destination"];
-                this.columnMask = base.Columns["Mask"];
                 this.columnGroup = base.Columns["Group"];
             }
             
@@ -452,8 +440,6 @@ namespace Configurator {
                 base.Columns.Add(this.columnSource);
                 this.columnDestination = new global::System.Data.DataColumn("Destination", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnDestination);
-                this.columnMask = new global::System.Data.DataColumn("Mask", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnMask);
                 this.columnGroup = new global::System.Data.DataColumn("Group", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnGroup);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
@@ -466,7 +452,6 @@ namespace Configurator {
                 this.columnId.Unique = true;
                 this.columnSource.MaxLength = 2147483647;
                 this.columnDestination.MaxLength = 2147483647;
-                this.columnMask.MaxLength = 2147483647;
                 this.columnGroup.MaxLength = 2147483647;
             }
             
@@ -653,22 +638,6 @@ namespace Configurator {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string Mask {
-                get {
-                    try {
-                        return ((string)(this[this.tablePath.MaskColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("Значение для столбца \'Mask\' в таблице \'Path\' равно DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablePath.MaskColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public string Group {
                 get {
                     try {
@@ -705,18 +674,6 @@ namespace Configurator {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void SetDestinationNull() {
                 this[this.tablePath.DestinationColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsMaskNull() {
-                return this.IsNull(this.tablePath.MaskColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetMaskNull() {
-                this[this.tablePath.MaskColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -894,33 +851,30 @@ namespace Configurator.DatabaseDataSetTableAdapters {
             tableMapping.ColumnMappings.Add("Id", "Id");
             tableMapping.ColumnMappings.Add("Source", "Source");
             tableMapping.ColumnMappings.Add("Destination", "Destination");
-            tableMapping.ColumnMappings.Add("Mask", "Mask");
             tableMapping.ColumnMappings.Add("Group", "Group");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
-            this._adapter.DeleteCommand.CommandText = "DELETE FROM [dbo].[Path] WHERE (([Id] = @Original_Id))";
+            this._adapter.DeleteCommand.CommandText = "DELETE FROM [Path] WHERE (([Id] = @Original_Id))";
             this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_Id", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Id", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = "INSERT INTO [dbo].[Path] ([Source], [Destination], [Mask], [Group]) VALUES (@Sour" +
-                "ce, @Destination, @Mask, @Group);\r\nSELECT Id, Source, Destination, Mask, [Group]" +
-                " FROM Path WHERE (Id = SCOPE_IDENTITY())";
+            this._adapter.InsertCommand.CommandText = "INSERT INTO [Path] ([Source], [Destination], [Group]) VALUES (@Source, @Destinati" +
+                "on, @Group);\r\nSELECT Id, Source, Destination, [Group] FROM Path WHERE (Id = SCOP" +
+                "E_IDENTITY())";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Source", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Source", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Destination", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Destination", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Mask", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Mask", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Group", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Group", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = "UPDATE [dbo].[Path] SET [Source] = @Source, [Destination] = @Destination, [Mask] " +
-                "= @Mask, [Group] = @Group WHERE (([Id] = @Original_Id));\r\nSELECT Id, Source, Des" +
-                "tination, Mask, [Group] FROM Path WHERE (Id = @Id)";
+            this._adapter.UpdateCommand.CommandText = "UPDATE [Path] SET [Source] = @Source, [Destination] = @Destination, [Group] = @Gr" +
+                "oup WHERE (([Id] = @Original_Id));\r\nSELECT Id, Source, Destination, [Group] FROM" +
+                " Path WHERE (Id = @Id)";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Source", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Source", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Destination", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Destination", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Mask", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Mask", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Group", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Group", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_Id", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Id", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Id", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "Id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -939,7 +893,7 @@ namespace Configurator.DatabaseDataSetTableAdapters {
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT Id, Source, Destination, Mask, [Group] FROM dbo.Path";
+            this._commandCollection[0].CommandText = "SELECT Id, Source, Destination, [Group] FROM Path";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -1022,7 +976,7 @@ namespace Configurator.DatabaseDataSetTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(string Source, string Destination, string Mask, string Group) {
+        public virtual int Insert(string Source, string Destination, string Group) {
             if ((Source == null)) {
                 this.Adapter.InsertCommand.Parameters[0].Value = global::System.DBNull.Value;
             }
@@ -1035,17 +989,11 @@ namespace Configurator.DatabaseDataSetTableAdapters {
             else {
                 this.Adapter.InsertCommand.Parameters[1].Value = ((string)(Destination));
             }
-            if ((Mask == null)) {
+            if ((Group == null)) {
                 this.Adapter.InsertCommand.Parameters[2].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[2].Value = ((string)(Mask));
-            }
-            if ((Group == null)) {
-                this.Adapter.InsertCommand.Parameters[3].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[3].Value = ((string)(Group));
+                this.Adapter.InsertCommand.Parameters[2].Value = ((string)(Group));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -1067,7 +1015,7 @@ namespace Configurator.DatabaseDataSetTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(string Source, string Destination, string Mask, string Group, int Original_Id, int Id) {
+        public virtual int Update(string Source, string Destination, string Group, int Original_Id, int Id) {
             if ((Source == null)) {
                 this.Adapter.UpdateCommand.Parameters[0].Value = global::System.DBNull.Value;
             }
@@ -1080,20 +1028,14 @@ namespace Configurator.DatabaseDataSetTableAdapters {
             else {
                 this.Adapter.UpdateCommand.Parameters[1].Value = ((string)(Destination));
             }
-            if ((Mask == null)) {
+            if ((Group == null)) {
                 this.Adapter.UpdateCommand.Parameters[2].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[2].Value = ((string)(Mask));
+                this.Adapter.UpdateCommand.Parameters[2].Value = ((string)(Group));
             }
-            if ((Group == null)) {
-                this.Adapter.UpdateCommand.Parameters[3].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[3].Value = ((string)(Group));
-            }
-            this.Adapter.UpdateCommand.Parameters[4].Value = ((int)(Original_Id));
-            this.Adapter.UpdateCommand.Parameters[5].Value = ((int)(Id));
+            this.Adapter.UpdateCommand.Parameters[3].Value = ((int)(Original_Id));
+            this.Adapter.UpdateCommand.Parameters[4].Value = ((int)(Id));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -1114,8 +1056,8 @@ namespace Configurator.DatabaseDataSetTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(string Source, string Destination, string Mask, string Group, int Original_Id) {
-            return this.Update(Source, Destination, Mask, Group, Original_Id, Original_Id);
+        public virtual int Update(string Source, string Destination, string Group, int Original_Id) {
+            return this.Update(Source, Destination, Group, Original_Id, Original_Id);
         }
     }
     

@@ -89,11 +89,11 @@ namespace WindowsServiceGuard
                 {
                     conn.Open();
                     SqlCommand cmd = conn.CreateCommand();
-                    cmd.CommandText = "SELECT Id, Source, Destination, Mask FROM Path";
+                    cmd.CommandText = "SELECT Id, Source, Destination FROM Path";
                     SqlDataReader pathReader = cmd.ExecuteReader();
                     while (pathReader.Read())
                     {// Поиск каталогов в источнике и копирование их на ресурс назначения
-                        string[] dirs = Directory.GetDirectories(pathReader["Source"].ToString(), pathReader["Mask"].ToString());
+                        string[] dirs = Directory.GetDirectories(pathReader["Source"].ToString());
                         foreach (string sourceSubDir in dirs)
                         {
                             using (var checkConn = Connection())
