@@ -1,17 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.ServiceProcess;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Timers;
-using System.Windows.Threading;
+
 
 namespace WindowsServiceGuard
 
@@ -57,7 +51,8 @@ namespace WindowsServiceGuard
         {
             System.Timers.Timer aTimer = new System.Timers.Timer();
             aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
-            aTimer.Interval = Convert.ToDouble(GetSettingValue("Interval"))*3600000;
+            //aTimer.Interval = Convert.ToDouble(GetSettingValue("Interval"))*3600000;//*час
+            aTimer.Interval = Convert.ToDouble(GetSettingValue("Interval"));
             aTimer.Enabled = true;
         }
 
@@ -82,46 +77,12 @@ namespace WindowsServiceGuard
             }
             catch (Exception ex)
             {
-                //File.WriteAllText("c:\\!del\\templog.txt", ex.Message);
                 return null;
             }
         }
 
         private static void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-            #region example
-            //string[] dirs = Directory.GetFiles(@"\\RONPP-S-FS10\video$", "*");
-            //string list = "";
-            //foreach (string dir in dirs)
-            //{
-            //    list += dir + Environment.NewLine;
-            //}
-            //File.WriteAllText("c:\\!del\\templog.txt", list);
-
-
-            //try
-            //{
-            //    using (var conn = Connection())
-            //    {
-            //        conn.Open();
-            //        SqlCommand cmd = conn.CreateCommand();
-            //        cmd.CommandText = "SELECT Id, Source FROM Source WHERE Id <> @Id";
-            //        cmd.Parameters.Add("@Id", SqlDbType.Int).Value = 0;
-            //        SqlDataReader myReader = cmd.ExecuteReader();
-            //        string _result = "";
-            //        while (myReader.Read())
-            //        {
-            //            _result += String.Format("Id: {0}; Source: {1} | ", myReader["Id"].ToString(), myReader["Source"].ToString())+Environment.NewLine;
-            //        }
-            //        File.WriteAllText("c:\\!del\\templog.txt", _result);
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    File.WriteAllText("c:\\!del\\templog.txt", ex.Message);
-            //}
-            #endregion
-
             try
             {
                 using (var conn = Connection())
@@ -131,45 +92,46 @@ namespace WindowsServiceGuard
                     cmd.CommandText = "SELECT Id, Source, Destination, Mask FROM Path";
                     SqlDataReader pathReader = cmd.ExecuteReader();
                     while (pathReader.Read())
-                    {// Поиск файлов в каталогах источниках и копирование их на ресурс назначения
-                        string[] files = Directory.GetFiles(pathReader["Source"].ToString(), pathReader["Mask"].ToString());
-                        foreach (string file in files)
+                    {// Поиск каталогов в источнике и копирование их на ресурс назначения
+                        string[] dirs = Directory.GetDirectories(pathReader["Source"].ToString(), pathReader["Mask"].ToString());
+                        foreach (string sourceSubDir in dirs)
                         {
-                            using (var checkConn = Connection()) {
+                            using (var checkConn = Connection())
+                            {
                                 checkConn.Open();
                                 SqlCommand checkCmd = checkConn.CreateCommand();
-                                checkCmd.CommandText = "SELECT Id FROM Files WHERE Path=@Path";
-                                string destFileName = Path.Combine(pathReader["Destination"].ToString(), Path.GetFileName(file));
-                                checkCmd.Parameters.Add("@Path", SqlDbType.NVarChar).Value = destFileName;
+                                checkCmd.CommandText = "SELECT Id FROM Objects WHERE Path=@Path";
+                                string dest = pathReader["Destination"].ToString();
+                                string pathObject = sourceSubDir.Replace(pathReader["Source"].ToString(), dest);
+                                checkCmd.Parameters.Add("@Path", SqlDbType.NVarChar).Value = pathObject;
                                 SqlDataReader checkReader = checkCmd.ExecuteReader();
                                 if (!checkReader.HasRows)
-                                { // Если файл не был ранее скопирован
-                                    File.Copy(file, destFileName, true); // Выполняется копирование
-                                    //И заносится информация об этом в БД
+                                { //Если не было ранее скопировано
+                                    CopyDir(pathReader["Source"].ToString(), dest);
+                                    //заносится информация об этом в БД
                                     checkReader.Close();
-                                    SqlCommand insertCmd = new SqlCommand("INSERT INTO Files (DateCreate, Path) values (GETDATE(), @Path);", checkConn);
-                                    insertCmd.Parameters.Add("@Path", SqlDbType.NVarChar).Value = destFileName;
+                                    SqlCommand insertCmd = new SqlCommand("INSERT INTO Objects (DateCreate, Path) values (GETDATE(), @Path);", checkConn);
+                                    insertCmd.Parameters.Add("@Path", SqlDbType.NVarChar).Value = pathObject;
                                     var result = insertCmd.ExecuteNonQuery();
                                 }
                             }
-
                         }
                     }
                     pathReader.Close();
-                    //cmd.CommandText = "SELECT Id, DateCreate, Path FROM Files WHERE DateCreate<DATEADD(second,@DayCount*-1,GETDATE())";
-                    cmd.CommandText = "SELECT Id, DateCreate, Path FROM Files WHERE DateCreate<DATEADD(day,@DayCount*-1,GETDATE())";
-                    cmd.Parameters.Add("@DayCount", SqlDbType.Int).Value = Convert.ToInt32(GetSettingValue("StoragePerioInDays"));
-                    SqlDataReader filesReader = cmd.ExecuteReader();
-                    while (filesReader.Read())
+                    cmd.CommandText = "SELECT Id, DateCreate, Path FROM Objects WHERE DateDelete IS NULL AND DateCreate<DATEADD(second,@DayCount*-1,GETDATE())";
+                    //cmd.CommandText = "SELECT Id, DateCreate, Path FROM Objects WHERE DateDelete IS NULL DateCreate<DATEADD(day,@DayCount*-1,GETDATE())";
+                    cmd.Parameters.Add("@DayCount", SqlDbType.Int).Value = Convert.ToInt32(GetSettingValue("StoragePeriodInDays"));
+                    SqlDataReader ObjectsReader = cmd.ExecuteReader();
+                    while (ObjectsReader.Read())
                     {
                         //Удаление файлов с истекшим сроком хранения
-                        File.Delete(filesReader["Path"].ToString());
+                        Directory.Delete(ObjectsReader["Path"].ToString(),true);
                         using (var updateConn = Connection())
                         {
                             updateConn.Open();
                             SqlCommand updateCmd = updateConn.CreateCommand();
-                            updateCmd.CommandText = "UPDATE Files SET DateDelete=GETDATE() WHERE Id=@Id;";
-                            updateCmd.Parameters.Add("@Id", SqlDbType.Int).Value = filesReader["Id"].ToString();
+                            updateCmd.CommandText = "UPDATE Objects SET DateDelete=GETDATE() WHERE Id=@Id;";
+                            updateCmd.Parameters.Add("@Id", SqlDbType.Int).Value = ObjectsReader["Id"].ToString();
                             updateCmd.ExecuteNonQuery();
                         }
                     }
@@ -177,10 +139,20 @@ namespace WindowsServiceGuard
             }
             catch (Exception ex)
             {
-                string logfile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "error.log");
+                string logfile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lastError.log");
                 File.WriteAllText(logfile, ex.Message);
             }
+        }
 
+        private static void CopyDir(string sourceDir, string dest)
+        {
+            //Создать идентичное дерево каталогов
+            foreach (string dirPath in Directory.GetDirectories(sourceDir, "*", SearchOption.AllDirectories))
+                Directory.CreateDirectory(dirPath.Replace(sourceDir, dest));
+
+            //Скопировать все файлы. И перезаписать(если такие существуют)
+            foreach (string newPath in Directory.GetFiles(sourceDir, "*.*", SearchOption.AllDirectories))
+                File.Copy(newPath, newPath.Replace(sourceDir, dest), true);
         }
     }
 }
