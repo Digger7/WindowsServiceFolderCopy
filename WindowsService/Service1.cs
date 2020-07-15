@@ -51,8 +51,8 @@ namespace WindowsServiceGuard
         {
             System.Timers.Timer aTimer = new System.Timers.Timer();
             aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
-            //aTimer.Interval = Convert.ToDouble(GetSettingValue("Interval"))*3600000;//*час
-            aTimer.Interval = Convert.ToDouble(GetSettingValue("Interval"));
+            aTimer.Interval = Convert.ToDouble(GetSettingValue("Interval"))*3600000;//*час
+            //aTimer.Interval = Convert.ToDouble(GetSettingValue("Interval"));// для отладки
             aTimer.Enabled = true;
         }
 
@@ -118,8 +118,8 @@ namespace WindowsServiceGuard
                         }
                     }
                     pathReader.Close();
-                    cmd.CommandText = "SELECT Id, DateCreate, Path FROM Objects WHERE DateDelete IS NULL AND DateCreate<DATEADD(second,@DayCount*-1,GETDATE())";
-                    //cmd.CommandText = "SELECT Id, DateCreate, Path FROM Objects WHERE DateDelete IS NULL DateCreate<DATEADD(day,@DayCount*-1,GETDATE())";
+                    //cmd.CommandText = "SELECT Id, DateCreate, Path FROM Objects WHERE DateDelete IS NULL AND DateCreate<DATEADD(second,@DayCount*-1,GETDATE())"; // Для отладки
+                    cmd.CommandText = "SELECT Id, DateCreate, Path FROM Objects WHERE DateDelete IS NULL AND DateCreate<DATEADD(day,@DayCount*-1,GETDATE())";
                     cmd.Parameters.Add("@DayCount", SqlDbType.Int).Value = Convert.ToInt32(GetSettingValue("StoragePeriodInDays"));
                     SqlDataReader ObjectsReader = cmd.ExecuteReader();
                     while (ObjectsReader.Read())
