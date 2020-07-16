@@ -27,6 +27,8 @@ namespace Configurator
 
             numericUpDownInterval.Value = Convert.ToDecimal(GetSettingValue("Interval"));
             numericUpDownPeriod.Value = Convert.ToDecimal(GetSettingValue("StoragePeriodInDays"));
+
+            checkBoxNoCopyOldFolder.Checked = GetSettingValue("NoCopyOldFolder")=="1"?true:false;
         }
 
         private static string GetSettingValue(string name)
@@ -78,6 +80,10 @@ namespace Configurator
 
                     updateCmd.Parameters["@Name"].Value = "StoragePeriodInDays";
                     updateCmd.Parameters["@Value"].Value = numericUpDownPeriod.Value.ToString();
+                    updateCmd.ExecuteNonQuery();
+
+                    updateCmd.Parameters["@Name"].Value = "NoCopyOldFolder";
+                    updateCmd.Parameters["@Value"].Value = checkBoxNoCopyOldFolder.Checked ? "1" : "0";
                     updateCmd.ExecuteNonQuery();
 
                     RestartService("GuardService");

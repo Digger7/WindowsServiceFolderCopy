@@ -57,6 +57,7 @@
             this.labelInterval = new System.Windows.Forms.Label();
             this.labelPeriod = new System.Windows.Forms.Label();
             this.buttonClear = new System.Windows.Forms.Button();
+            this.checkBoxNoCopyOldFolder = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).BeginInit();
             this.bindingNavigator1.SuspendLayout();
@@ -74,9 +75,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.bindingNavigator1);
             this.panel1.Controls.Add(this.dataGridView1);
-            this.panel1.Location = new System.Drawing.Point(3, 35);
+            this.panel1.Location = new System.Drawing.Point(3, 53);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(879, 426);
+            this.panel1.Size = new System.Drawing.Size(879, 408);
             this.panel1.TabIndex = 0;
             // 
             // bindingNavigator1
@@ -218,7 +219,7 @@
             this.dataGridView1.DataSource = this.pathBindingSource;
             this.dataGridView1.Location = new System.Drawing.Point(0, 28);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(878, 397);
+            this.dataGridView1.Size = new System.Drawing.Size(878, 379);
             this.dataGridView1.TabIndex = 0;
             // 
             // idDataGridViewTextBoxColumn
@@ -316,11 +317,24 @@
             this.buttonClear.UseVisualStyleBackColor = true;
             this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
             // 
+            // checkBoxNoCopyOldFolder
+            // 
+            this.checkBoxNoCopyOldFolder.AutoSize = true;
+            this.checkBoxNoCopyOldFolder.Checked = true;
+            this.checkBoxNoCopyOldFolder.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxNoCopyOldFolder.Location = new System.Drawing.Point(371, 31);
+            this.checkBoxNoCopyOldFolder.Name = "checkBoxNoCopyOldFolder";
+            this.checkBoxNoCopyOldFolder.Size = new System.Drawing.Size(286, 17);
+            this.checkBoxNoCopyOldFolder.TabIndex = 7;
+            this.checkBoxNoCopyOldFolder.Text = "Не копировать каталоги старше периода хранения";
+            this.checkBoxNoCopyOldFolder.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 462);
+            this.Controls.Add(this.checkBoxNoCopyOldFolder);
             this.Controls.Add(this.buttonClear);
             this.Controls.Add(this.labelPeriod);
             this.Controls.Add(this.labelInterval);
@@ -377,6 +391,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn destinationDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn groupDataGridViewTextBoxColumn;
         private System.Windows.Forms.Button buttonClear;
+        private System.Windows.Forms.CheckBox checkBoxNoCopyOldFolder;
     }
 }
 

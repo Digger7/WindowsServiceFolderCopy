@@ -36,6 +36,8 @@ namespace WindowsServiceGuard
 
     class Сopyist
     {
+        private static bool noCopyOldFolder = Convert.ToBoolean(GetSettingValue("NoCopyOldFolder"));
+        private static int storagePeriodInDays = Convert.ToInt32(GetSettingValue("StoragePeriodInDays"));
         private static System.Timers.Timer aTimer;
         private static double interval = Convert.ToDouble(GetSettingValue("Interval")) * 3600000;//*час;
         //private static double interval = Convert.ToDouble(GetSettingValue("Interval")) * 60000;//Для отладки;
@@ -108,23 +110,25 @@ namespace WindowsServiceGuard
                                 string pathObject = sourceSubDir.Replace(pathReader["Source"].ToString(), dest);
                                 checkCmd.Parameters.Add("@Path", SqlDbType.NVarChar).Value = pathObject;
                                 SqlDataReader checkReader = checkCmd.ExecuteReader();
-                                if (!checkReader.HasRows)
-                                { //Если не было ранее скопировано
-                                    if(!Directory.Exists(pathObject)) Directory.CreateDirectory(pathObject);
-                                    CopyDir(sourceSubDir, pathObject);
-                                    //заносится информация об этом в БД
-                                    checkReader.Close();
-                                    SqlCommand insertCmd = new SqlCommand("INSERT INTO Objects (DateCreate, Path) values (GETDATE(), @Path);", checkConn);
-                                    insertCmd.Parameters.Add("@Path", SqlDbType.NVarChar).Value = pathObject;
-                                    var result = insertCmd.ExecuteNonQuery();
-                                }
+
+                                if(noCopyOldFolder && Directory.GetCreationTime(sourceSubDir) > DateTime.Now.AddDays(storagePeriodInDays*-1))
+                                    if (!checkReader.HasRows)
+                                    { //Если не было ранее скопировано
+                                        if(!Directory.Exists(pathObject)) Directory.CreateDirectory(pathObject);
+                                        CopyDir(sourceSubDir, pathObject);
+                                        //заносится информация об этом в БД
+                                        checkReader.Close();
+                                        SqlCommand insertCmd = new SqlCommand("INSERT INTO Objects (DateCreate, Path) values (GETDATE(), @Path);", checkConn);
+                                        insertCmd.Parameters.Add("@Path", SqlDbType.NVarChar).Value = pathObject;
+                                        var result = insertCmd.ExecuteNonQuery();
+                                    }
                             }
                         }
                     }
                     pathReader.Close();
                     //cmd.CommandText = "SELECT Id, DateCreate, Path FROM Objects WHERE DateDelete IS NULL AND DateCreate<DATEADD(second,@DayCount*-1,GETDATE())"; // Для отладки
                     cmd.CommandText = "SELECT Id, DateCreate, Path FROM Objects WHERE DateDelete IS NULL AND DateCreate<DATEADD(day,@DayCount*-1,GETDATE())";
-                    cmd.Parameters.Add("@DayCount", SqlDbType.Int).Value = Convert.ToInt32(GetSettingValue("StoragePeriodInDays"));
+                    cmd.Parameters.Add("@DayCount", SqlDbType.Int).Value = storagePeriodInDays;
                     SqlDataReader ObjectsReader = cmd.ExecuteReader();
                     while (ObjectsReader.Read())
                     {
