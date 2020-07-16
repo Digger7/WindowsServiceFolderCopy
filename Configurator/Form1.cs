@@ -101,10 +101,7 @@ namespace Configurator
                     truncateConn.Open();
                     SqlCommand truncateCmd = truncateConn.CreateCommand();
                     truncateCmd.CommandText = "TRUNCATE TABLE Objects;";
-                    if (truncateCmd.ExecuteNonQuery() > 0)
-                    {
-                        MessageBox.Show("Таблица скопированных каталогов очищена!", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
+                    truncateCmd.ExecuteNonQuery();
                 }
             }
         }
