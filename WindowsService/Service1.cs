@@ -111,6 +111,7 @@ namespace WindowsServiceGuard
                                 checkCmd.Parameters.Add("@Path", SqlDbType.NVarChar).Value = pathObject;
                                 SqlDataReader checkReader = checkCmd.ExecuteReader();
 
+                                //if (!noCopyOldFolder || Directory.GetCreationTime(sourceSubDir) > DateTime.Now.AddSeconds(storagePeriodInDays * -1))// Для отладки
                                 if(!noCopyOldFolder || Directory.GetCreationTime(sourceSubDir) > DateTime.Now.AddDays(storagePeriodInDays*-1))
                                     if (!checkReader.HasRows)
                                     { //Если не было ранее скопировано
