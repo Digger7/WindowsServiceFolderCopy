@@ -138,7 +138,15 @@ namespace WindowsServiceGuard
                         {
                             updateConn.Open();
                             SqlCommand updateCmd = updateConn.CreateCommand();
-                            updateCmd.CommandText = "UPDATE Objects SET DateDelete=GETDATE() WHERE Id=@Id;";
+                            //updateCmd.CommandText = "UPDATE Objects SET DateDelete=GETDATE() WHERE Id=@Id;";
+                            //updateCmd.Parameters.Add("@Id", SqlDbType.Int).Value = ObjectsReader["Id"].ToString();
+                            if (noCopyOldFolder)
+                            {
+                                updateCmd.CommandText = "DELETE FROM Objects WHERE Id=@Id;";
+                            }
+                            else {
+                                updateCmd.CommandText = "UPDATE Objects SET DateDelete=GETDATE() WHERE Id=@Id;";
+                            }
                             updateCmd.Parameters.Add("@Id", SqlDbType.Int).Value = ObjectsReader["Id"].ToString();
                             updateCmd.ExecuteNonQuery();
                         }
