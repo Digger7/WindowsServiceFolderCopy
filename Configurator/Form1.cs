@@ -90,6 +90,23 @@ namespace Configurator
             System.Diagnostics.Process.Start("net", $"stop {serviceName}");
             System.Diagnostics.Process.Start("net", $"start {serviceName}");
         }
-    }
 
+        private void buttonClear_Click(object sender, EventArgs e)
+        {
+            var confirmResult = MessageBox.Show("Очистить таблицу скопированных каталогов?", "Подтвердите", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirmResult == DialogResult.Yes)
+            {
+                using (var updateConn = Connection())
+                {
+                    updateConn.Open();
+                    SqlCommand updateCmd = updateConn.CreateCommand();
+                    updateCmd.CommandText = "TRUNCATE TABLE Objects;";
+                    if (updateCmd.ExecuteNonQuery() == 1)
+                    {
+                        MessageBox.Show("Таблица скопированных каталогов очищена!", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+        }
+    }
 }

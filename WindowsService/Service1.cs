@@ -36,6 +36,10 @@ namespace WindowsServiceGuard
 
     class Сopyist
     {
+        private static System.Timers.Timer aTimer;
+        private static double interval = Convert.ToDouble(GetSettingValue("Interval")) * 3600000;//*час;
+        //private static double interval = Convert.ToDouble(GetSettingValue("Interval")) * 60000;//Для отладки;
+
         public Сopyist()
         {
 
@@ -49,10 +53,9 @@ namespace WindowsServiceGuard
 
         public void Start()
         {
-            System.Timers.Timer aTimer = new System.Timers.Timer();
+            aTimer = new System.Timers.Timer();
+
             aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
-            aTimer.Interval = Convert.ToDouble(GetSettingValue("Interval"))*3600000;//*час
-            //aTimer.Interval = Convert.ToDouble(GetSettingValue("Interval"));// для отладки
             aTimer.Enabled = true;
         }
 
@@ -107,7 +110,8 @@ namespace WindowsServiceGuard
                                 SqlDataReader checkReader = checkCmd.ExecuteReader();
                                 if (!checkReader.HasRows)
                                 { //Если не было ранее скопировано
-                                    CopyDir(pathReader["Source"].ToString(), dest);
+                                    if(!Directory.Exists(pathObject)) Directory.CreateDirectory(pathObject);
+                                    CopyDir(sourceSubDir, pathObject);
                                     //заносится информация об этом в БД
                                     checkReader.Close();
                                     SqlCommand insertCmd = new SqlCommand("INSERT INTO Objects (DateCreate, Path) values (GETDATE(), @Path);", checkConn);
@@ -142,6 +146,10 @@ namespace WindowsServiceGuard
                 string logfile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lastError.log");
                 File.WriteAllText(logfile, ex.Message);
             }
+
+            aTimer.Stop();
+            aTimer.Interval = interval;
+            aTimer.Start();
         }
 
         private static void CopyDir(string sourceDir, string dest)
