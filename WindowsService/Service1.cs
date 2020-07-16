@@ -36,7 +36,7 @@ namespace WindowsServiceGuard
 
     class Сopyist
     {
-        private static bool noCopyOldFolder = Convert.ToBoolean(GetSettingValue("NoCopyOldFolder"));
+        private static bool noCopyOldFolder = GetSettingValue("NoCopyOldFolder")=="1"?true:false;
         private static int storagePeriodInDays = Convert.ToInt32(GetSettingValue("StoragePeriodInDays"));
         private static System.Timers.Timer aTimer;
         private static double interval = Convert.ToDouble(GetSettingValue("Interval")) * 3600000;//*час;
@@ -111,7 +111,7 @@ namespace WindowsServiceGuard
                                 checkCmd.Parameters.Add("@Path", SqlDbType.NVarChar).Value = pathObject;
                                 SqlDataReader checkReader = checkCmd.ExecuteReader();
 
-                                if(noCopyOldFolder && Directory.GetCreationTime(sourceSubDir) > DateTime.Now.AddDays(storagePeriodInDays*-1))
+                                if(!noCopyOldFolder || Directory.GetCreationTime(sourceSubDir) > DateTime.Now.AddDays(storagePeriodInDays*-1))
                                     if (!checkReader.HasRows)
                                     { //Если не было ранее скопировано
                                         if(!Directory.Exists(pathObject)) Directory.CreateDirectory(pathObject);
