@@ -96,12 +96,12 @@ namespace Configurator
             var confirmResult = MessageBox.Show("Очистить таблицу скопированных каталогов?", "Подтвердите", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (confirmResult == DialogResult.Yes)
             {
-                using (var updateConn = Connection())
+                using (var truncateConn = Connection())
                 {
-                    updateConn.Open();
-                    SqlCommand updateCmd = updateConn.CreateCommand();
-                    updateCmd.CommandText = "TRUNCATE TABLE Objects;";
-                    if (updateCmd.ExecuteNonQuery() == 1)
+                    truncateConn.Open();
+                    SqlCommand truncateCmd = truncateConn.CreateCommand();
+                    truncateCmd.CommandText = "TRUNCATE TABLE Objects;";
+                    if (truncateCmd.ExecuteNonQuery() > 0)
                     {
                         MessageBox.Show("Таблица скопированных каталогов очищена!", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
