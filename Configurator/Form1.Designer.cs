@@ -76,7 +76,7 @@
             this.panel1.Controls.Add(this.dataGridView1);
             this.panel1.Location = new System.Drawing.Point(3, 35);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(870, 426);
+            this.panel1.Size = new System.Drawing.Size(879, 426);
             this.panel1.TabIndex = 0;
             // 
             // bindingNavigator1
@@ -104,7 +104,7 @@
             this.bindingNavigator1.MovePreviousItem = this.bindingNavigatorMovePreviousItem;
             this.bindingNavigator1.Name = "bindingNavigator1";
             this.bindingNavigator1.PositionItem = this.bindingNavigatorPositionItem;
-            this.bindingNavigator1.Size = new System.Drawing.Size(870, 25);
+            this.bindingNavigator1.Size = new System.Drawing.Size(879, 25);
             this.bindingNavigator1.TabIndex = 1;
             this.bindingNavigator1.Text = "bindingNavigator1";
             // 
@@ -218,7 +218,7 @@
             this.dataGridView1.DataSource = this.pathBindingSource;
             this.dataGridView1.Location = new System.Drawing.Point(0, 28);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(869, 397);
+            this.dataGridView1.Size = new System.Drawing.Size(878, 397);
             this.dataGridView1.TabIndex = 0;
             // 
             // idDataGridViewTextBoxColumn
@@ -308,9 +308,9 @@
             // 
             // buttonClear
             // 
-            this.buttonClear.Location = new System.Drawing.Point(673, 4);
+            this.buttonClear.Location = new System.Drawing.Point(673, 3);
             this.buttonClear.Name = "buttonClear";
-            this.buttonClear.Size = new System.Drawing.Size(189, 23);
+            this.buttonClear.Size = new System.Drawing.Size(199, 29);
             this.buttonClear.TabIndex = 6;
             this.buttonClear.Text = "Очистить таблицу скопированных";
             this.buttonClear.UseVisualStyleBackColor = true;
@@ -320,7 +320,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(875, 462);
+            this.ClientSize = new System.Drawing.Size(884, 462);
             this.Controls.Add(this.buttonClear);
             this.Controls.Add(this.labelPeriod);
             this.Controls.Add(this.labelInterval);
@@ -329,7 +329,7 @@
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(800, 500);
+            this.MinimumSize = new System.Drawing.Size(900, 500);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Load += new System.EventHandler(this.Form1_Load);
