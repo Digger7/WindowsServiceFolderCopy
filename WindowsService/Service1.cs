@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
+using System.Linq;
 using System.ServiceProcess;
 using System.Threading;
 using System.Timers;
@@ -103,32 +104,46 @@ namespace WindowsServiceGuard
                         {
                             using (var checkConn = Connection())
                             {
+                                long sourceSubDirSize = Directory.EnumerateFiles(sourceSubDir, "*", SearchOption.AllDirectories).Sum(fileInfo => new FileInfo(fileInfo).Length);
+
                                 checkConn.Open();
                                 SqlCommand checkCmd = checkConn.CreateCommand();
-                                checkCmd.CommandText = "SELECT Id FROM Objects WHERE Path=@Path";
+                                checkCmd.CommandText = "SELECT Id, Size FROM Objects WHERE Path=@Path";
                                 string dest = pathReader["Destination"].ToString();
                                 string pathObject = sourceSubDir.Replace(pathReader["Source"].ToString(), dest);
                                 checkCmd.Parameters.Add("@Path", SqlDbType.NVarChar).Value = pathObject;
                                 SqlDataReader checkReader = checkCmd.ExecuteReader();
+                                checkReader.Read();
+
+                                bool sizeChanged = false;
+                                if(checkReader.HasRows) sizeChanged = sourceSubDirSize != Convert.ToInt64(checkReader["Size"]) ? true : false;
 
                                 //if (!noCopyOldFolder || Directory.GetCreationTime(sourceSubDir) > DateTime.Now.AddSeconds(storagePeriodInDays * -1))// Для отладки
                                 if(!noCopyOldFolder || Directory.GetCreationTime(sourceSubDir) > DateTime.Now.AddDays(storagePeriodInDays*-1))
-                                    if (!checkReader.HasRows)
-                                    { //Если не было ранее скопировано
+                                    if (!checkReader.HasRows || sizeChanged)//Если записи нет или размер папки изменился
+                                    { //Если не было ранее скопировано и размер папки не изменился
                                         if(!Directory.Exists(pathObject)) Directory.CreateDirectory(pathObject);
                                         CopyDir(sourceSubDir, pathObject);
-                                        //заносится информация об этом в БД
+
                                         checkReader.Close();
-                                        SqlCommand insertCmd = new SqlCommand("INSERT INTO Objects (DateCreate, Path) values (GETDATE(), @Path);", checkConn);
-                                        insertCmd.Parameters.Add("@Path", SqlDbType.NVarChar).Value = pathObject;
-                                        var result = insertCmd.ExecuteNonQuery();
+                                        SqlCommand objectsCmd;
+                                        if (!sizeChanged)
+                                        {
+                                            objectsCmd = new SqlCommand("INSERT INTO Objects (DateCreate, Path, Size) values (GETDATE(), @Path, @Size);", checkConn);
+                                        }
+                                        else {
+                                            objectsCmd = new SqlCommand("UPDATE Objects SET Size=@Size WHERE Path=@Path;", checkConn);
+                                        }
+                                        objectsCmd.Parameters.Add("@Path", SqlDbType.NVarChar).Value = pathObject;
+                                        objectsCmd.Parameters.Add("@Size", SqlDbType.Int).Value = sourceSubDirSize;
+                                        var result = objectsCmd.ExecuteNonQuery();
                                     }
                             }
                         }
                     }
                     pathReader.Close();
-                    //cmd.CommandText = "SELECT Id, DateCreate, Path FROM Objects WHERE DateDelete IS NULL AND DateCreate<DATEADD(second,@DayCount*-1,GETDATE())"; // Для отладки
-                    cmd.CommandText = "SELECT Id, DateCreate, Path FROM Objects WHERE DateDelete IS NULL AND DateCreate<DATEADD(day,@DayCount*-1,GETDATE())";
+                    cmd.CommandText = "SELECT Id, DateCreate, Path FROM Objects WHERE DateDelete IS NULL AND DateCreate<DATEADD(second,@DayCount*-1,GETDATE())"; // Для отладки
+                    //cmd.CommandText = "SELECT Id, DateCreate, Path FROM Objects WHERE DateDelete IS NULL AND DateCreate<DATEADD(day,@DayCount*-1,GETDATE())";
                     cmd.Parameters.Add("@DayCount", SqlDbType.Int).Value = storagePeriodInDays;
                     SqlDataReader ObjectsReader = cmd.ExecuteReader();
                     while (ObjectsReader.Read())
@@ -171,7 +186,12 @@ namespace WindowsServiceGuard
 
             //Скопировать все файлы. И перезаписать(если такие существуют)
             foreach (string newPath in Directory.GetFiles(sourceDir, "*.*", SearchOption.AllDirectories))
-                File.Copy(newPath, newPath.Replace(sourceDir, dest), true);
+            {
+                //File.Copy(newPath, newPath.Replace(sourceDir, dest), true);
+                string filePath = newPath.Replace(sourceDir, dest);
+                if (!File.Exists(filePath))
+                    File.Copy(newPath, filePath, true);
+            }
         }
     }
 }
