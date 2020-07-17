@@ -110,7 +110,11 @@ namespace WindowsServiceGuard
                                 SqlCommand checkCmd = checkConn.CreateCommand();
                                 checkCmd.CommandText = "SELECT Id, Size FROM Objects WHERE Path=@Path";
                                 string dest = pathReader["Destination"].ToString();
-                                string pathObject = sourceSubDir.Replace(pathReader["Source"].ToString(), dest);
+
+                                string sourcePath = pathReader["Source"].ToString();
+                                sourcePath = sourcePath.Substring(sourcePath.Length - 1) == @"\" ? sourcePath.Remove(sourcePath.Length - 1) : sourcePath;
+                                string pathObject = sourceSubDir.Replace(sourcePath, dest);
+
                                 checkCmd.Parameters.Add("@Path", SqlDbType.NVarChar).Value = pathObject;
                                 SqlDataReader checkReader = checkCmd.ExecuteReader();
                                 checkReader.Read();
@@ -142,8 +146,8 @@ namespace WindowsServiceGuard
                         }
                     }
                     pathReader.Close();
-                    cmd.CommandText = "SELECT Id, DateCreate, Path FROM Objects WHERE DateDelete IS NULL AND DateCreate<DATEADD(second,@DayCount*-1,GETDATE())"; // Для отладки
-                    //cmd.CommandText = "SELECT Id, DateCreate, Path FROM Objects WHERE DateDelete IS NULL AND DateCreate<DATEADD(day,@DayCount*-1,GETDATE())";
+                    //cmd.CommandText = "SELECT Id, DateCreate, Path FROM Objects WHERE DateDelete IS NULL AND DateCreate<DATEADD(second,@DayCount*-1,GETDATE())"; // Для отладки
+                    cmd.CommandText = "SELECT Id, DateCreate, Path FROM Objects WHERE DateDelete IS NULL AND DateCreate<DATEADD(day,@DayCount*-1,GETDATE())";
                     cmd.Parameters.Add("@DayCount", SqlDbType.Int).Value = storagePeriodInDays;
                     SqlDataReader ObjectsReader = cmd.ExecuteReader();
                     while (ObjectsReader.Read())
