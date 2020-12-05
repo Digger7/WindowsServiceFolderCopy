@@ -46,10 +46,6 @@
             this.bindingNavigatorMoveLastItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.sourceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.destinationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.groupDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pathTableAdapter = new Configurator.DatabaseDataSetTableAdapters.PathTableAdapter();
             this.buttonSave = new System.Windows.Forms.Button();
             this.numericUpDownInterval = new System.Windows.Forms.NumericUpDown();
@@ -58,6 +54,10 @@
             this.labelPeriod = new System.Windows.Forms.Label();
             this.buttonClear = new System.Windows.Forms.Button();
             this.checkBoxNoCopyOldFolder = new System.Windows.Forms.CheckBox();
+            this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.sourceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.destinationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).BeginInit();
             this.bindingNavigator1.SuspendLayout();
@@ -222,35 +222,6 @@
             this.dataGridView1.Size = new System.Drawing.Size(878, 379);
             this.dataGridView1.TabIndex = 0;
             // 
-            // idDataGridViewTextBoxColumn
-            // 
-            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
-            this.idDataGridViewTextBoxColumn.HeaderText = "Ид.";
-            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
-            this.idDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // sourceDataGridViewTextBoxColumn
-            // 
-            this.sourceDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.sourceDataGridViewTextBoxColumn.DataPropertyName = "Source";
-            this.sourceDataGridViewTextBoxColumn.HeaderText = "Источник";
-            this.sourceDataGridViewTextBoxColumn.MinimumWidth = 200;
-            this.sourceDataGridViewTextBoxColumn.Name = "sourceDataGridViewTextBoxColumn";
-            // 
-            // destinationDataGridViewTextBoxColumn
-            // 
-            this.destinationDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.destinationDataGridViewTextBoxColumn.DataPropertyName = "Destination";
-            this.destinationDataGridViewTextBoxColumn.HeaderText = "Назначение";
-            this.destinationDataGridViewTextBoxColumn.MinimumWidth = 200;
-            this.destinationDataGridViewTextBoxColumn.Name = "destinationDataGridViewTextBoxColumn";
-            // 
-            // groupDataGridViewTextBoxColumn
-            // 
-            this.groupDataGridViewTextBoxColumn.DataPropertyName = "Group";
-            this.groupDataGridViewTextBoxColumn.HeaderText = "Группа";
-            this.groupDataGridViewTextBoxColumn.Name = "groupDataGridViewTextBoxColumn";
-            // 
             // pathTableAdapter
             // 
             this.pathTableAdapter.ClearBeforeFill = true;
@@ -261,7 +232,7 @@
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(82, 29);
             this.buttonSave.TabIndex = 1;
-            this.buttonSave.Text = "Сохранить";
+            this.buttonSave.Text = "Save";
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
@@ -279,7 +250,7 @@
             // 
             // numericUpDownPeriod
             // 
-            this.numericUpDownPeriod.Location = new System.Drawing.Point(540, 6);
+            this.numericUpDownPeriod.Location = new System.Drawing.Point(502, 6);
             this.numericUpDownPeriod.Maximum = new decimal(new int[] {
             1874919423,
             2328306,
@@ -292,20 +263,20 @@
             // labelInterval
             // 
             this.labelInterval.AutoSize = true;
-            this.labelInterval.Location = new System.Drawing.Point(96, 9);
+            this.labelInterval.Location = new System.Drawing.Point(146, 8);
             this.labelInterval.Name = "labelInterval";
-            this.labelInterval.Size = new System.Drawing.Size(126, 13);
+            this.labelInterval.Size = new System.Drawing.Size(72, 13);
             this.labelInterval.TabIndex = 4;
-            this.labelInterval.Text = "Интервал запуска (час)";
+            this.labelInterval.Text = "Interval (hour)";
             // 
             // labelPeriod
             // 
             this.labelPeriod.AutoSize = true;
-            this.labelPeriod.Location = new System.Drawing.Point(368, 9);
+            this.labelPeriod.Location = new System.Drawing.Point(394, 8);
             this.labelPeriod.Name = "labelPeriod";
-            this.labelPeriod.Size = new System.Drawing.Size(169, 13);
+            this.labelPeriod.Size = new System.Drawing.Size(102, 13);
             this.labelPeriod.TabIndex = 5;
-            this.labelPeriod.Text = "Период хранения файлов (дней)";
+            this.labelPeriod.Text = "Storage period (day)";
             // 
             // buttonClear
             // 
@@ -313,7 +284,7 @@
             this.buttonClear.Name = "buttonClear";
             this.buttonClear.Size = new System.Drawing.Size(199, 29);
             this.buttonClear.TabIndex = 6;
-            this.buttonClear.Text = "Очистить таблицу скопированных";
+            this.buttonClear.Text = "Clear history";
             this.buttonClear.UseVisualStyleBackColor = true;
             this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
             // 
@@ -322,12 +293,41 @@
             this.checkBoxNoCopyOldFolder.AutoSize = true;
             this.checkBoxNoCopyOldFolder.Checked = true;
             this.checkBoxNoCopyOldFolder.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxNoCopyOldFolder.Location = new System.Drawing.Point(371, 31);
+            this.checkBoxNoCopyOldFolder.Location = new System.Drawing.Point(397, 33);
             this.checkBoxNoCopyOldFolder.Name = "checkBoxNoCopyOldFolder";
-            this.checkBoxNoCopyOldFolder.Size = new System.Drawing.Size(286, 17);
+            this.checkBoxNoCopyOldFolder.Size = new System.Drawing.Size(265, 17);
             this.checkBoxNoCopyOldFolder.TabIndex = 7;
-            this.checkBoxNoCopyOldFolder.Text = "Не копировать каталоги старше периода хранения";
+            this.checkBoxNoCopyOldFolder.Text = "Don not copy folders older that the retention period";
             this.checkBoxNoCopyOldFolder.UseVisualStyleBackColor = true;
+            // 
+            // idDataGridViewTextBoxColumn
+            // 
+            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
+            this.idDataGridViewTextBoxColumn.HeaderText = "ID";
+            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
+            this.idDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // sourceDataGridViewTextBoxColumn
+            // 
+            this.sourceDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.sourceDataGridViewTextBoxColumn.DataPropertyName = "Source";
+            this.sourceDataGridViewTextBoxColumn.HeaderText = "Source";
+            this.sourceDataGridViewTextBoxColumn.MinimumWidth = 200;
+            this.sourceDataGridViewTextBoxColumn.Name = "sourceDataGridViewTextBoxColumn";
+            // 
+            // destinationDataGridViewTextBoxColumn
+            // 
+            this.destinationDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.destinationDataGridViewTextBoxColumn.DataPropertyName = "Destination";
+            this.destinationDataGridViewTextBoxColumn.HeaderText = "Destination";
+            this.destinationDataGridViewTextBoxColumn.MinimumWidth = 200;
+            this.destinationDataGridViewTextBoxColumn.Name = "destinationDataGridViewTextBoxColumn";
+            // 
+            // groupDataGridViewTextBoxColumn
+            // 
+            this.groupDataGridViewTextBoxColumn.DataPropertyName = "Group";
+            this.groupDataGridViewTextBoxColumn.HeaderText = "Group";
+            this.groupDataGridViewTextBoxColumn.Name = "groupDataGridViewTextBoxColumn";
             // 
             // Form1
             // 
@@ -386,12 +386,12 @@
         private System.Windows.Forms.NumericUpDown numericUpDownPeriod;
         private System.Windows.Forms.Label labelInterval;
         private System.Windows.Forms.Label labelPeriod;
+        private System.Windows.Forms.Button buttonClear;
+        private System.Windows.Forms.CheckBox checkBoxNoCopyOldFolder;
         private System.Windows.Forms.DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn sourceDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn destinationDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn groupDataGridViewTextBoxColumn;
-        private System.Windows.Forms.Button buttonClear;
-        private System.Windows.Forms.CheckBox checkBoxNoCopyOldFolder;
     }
 }
 

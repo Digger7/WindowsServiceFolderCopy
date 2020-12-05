@@ -1,0 +1,13 @@
+﻿Выполняется установка сборки 'C:\!del\1\WindowsService\WindowsService\bin\Debug\WindowsServiceFolderCopy.exe'.
+Затронуты следующие параметры:
+   logtoconsole = 
+   logfile = C:\!del\1\WindowsService\WindowsService\bin\Debug\WindowsServiceFolderCopy.InstallLog
+   assemblypath = C:\!del\1\WindowsService\WindowsService\bin\Debug\WindowsServiceFolderCopy.exe
+Устанавливается служба FolderCopyService...
+Служба FolderCopyService успешно установлена.
+Создается исходный EventLog FolderCopyService в журнале Application...
+Выполняется фиксация сборки 'C:\!del\1\WindowsService\WindowsService\bin\Debug\WindowsServiceFolderCopy.exe'.
+Затронуты следующие параметры:
+   logtoconsole = 
+   logfile = C:\!del\1\WindowsService\WindowsService\bin\Debug\WindowsServiceFolderCopy.InstallLog
+   assemblypath = C:\!del\1\WindowsService\WindowsService\bin\Debug\WindowsServiceFolderCopy.exe

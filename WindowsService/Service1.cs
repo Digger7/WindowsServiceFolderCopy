@@ -8,7 +8,7 @@ using System.Threading;
 using System.Timers;
 
 
-namespace WindowsServiceGuard
+namespace WindowsServiceFolderCopy
 
 {
     public partial class Service1 : ServiceBase

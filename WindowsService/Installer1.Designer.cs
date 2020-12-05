@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace WindowsServicGuard
+namespace WindowsServicFolderCopy
 {
     partial class Installer1
     {

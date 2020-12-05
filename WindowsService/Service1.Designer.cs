@@ -1,4 +1,4 @@
-﻿namespace WindowsServiceGuard
+﻿namespace WindowsServiceFolderCopy
 {
     partial class Service1
     {

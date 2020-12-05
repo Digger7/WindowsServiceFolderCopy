@@ -1,0 +1,11 @@
+C:\!del\1\WindowsService\WindowsService\bin\Debug\DeleteService.bat
+C:\!del\1\WindowsService\WindowsService\bin\Debug\InstallService.bat
+C:\!del\1\WindowsService\WindowsService\bin\Debug\Database.mdf
+C:\!del\1\WindowsService\WindowsService\bin\Debug\Database_log.ldf
+C:\!del\1\WindowsService\WindowsService\bin\Debug\WindowsServiceFolderCopy.exe.config
+C:\!del\1\WindowsService\WindowsService\bin\Debug\WindowsServiceFolderCopy.exe
+C:\!del\1\WindowsService\WindowsService\bin\Debug\WindowsServiceFolderCopy.pdb
+C:\!del\1\WindowsService\WindowsService\obj\Debug\WindowsServiceFolderCopy.csprojAssemblyReference.cache
+C:\!del\1\WindowsService\WindowsService\obj\Debug\WindowsServiceFolderCopy.csproj.CoreCompileInputs.cache
+C:\!del\1\WindowsService\WindowsService\obj\Debug\WindowsServiceFolderCopy.exe
+C:\!del\1\WindowsService\WindowsService\obj\Debug\WindowsServiceFolderCopy.pdb

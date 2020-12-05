@@ -1,7 +1,7 @@
 @ECHO OFF
 
-net stop GuardService
-sc delete GuardService
+net stop FolderCopyService
+sc delete FolderCopyService
 
 pause
 echo Done.

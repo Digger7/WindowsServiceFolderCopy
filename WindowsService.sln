@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29911.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsServiceGuard", "WindowsService\WindowsServiceGuard.csproj", "{42FD5FD9-CB3D-4150-98AC-402994E99F25}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsServiceFolderCopy", "WindowsService\WindowsServiceFolderCopy.csproj", "{42FD5FD9-CB3D-4150-98AC-402994E99F25}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configurator", "Configurator\Configurator.csproj", "{B19CC5A1-FA15-40B7-8DE7-7FD09AB5F294}"
 EndProject

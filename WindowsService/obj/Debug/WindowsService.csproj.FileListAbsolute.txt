@@ -1,0 +1,7 @@
+D:\!!Tehno\Страж\Project\WindowsService\WindowsService\WindowsService\bin\Debug\WindowsService.exe.config
+D:\!!Tehno\Страж\Project\WindowsService\WindowsService\WindowsService\bin\Debug\WindowsService.exe
+D:\!!Tehno\Страж\Project\WindowsService\WindowsService\WindowsService\bin\Debug\WindowsService.pdb
+D:\!!Tehno\Страж\Project\WindowsService\WindowsService\WindowsService\obj\Debug\WindowsService.csprojAssemblyReference.cache
+D:\!!Tehno\Страж\Project\WindowsService\WindowsService\WindowsService\obj\Debug\WindowsService.csproj.CoreCompileInputs.cache
+D:\!!Tehno\Страж\Project\WindowsService\WindowsService\WindowsService\obj\Debug\WindowsService.exe
+D:\!!Tehno\Страж\Project\WindowsService\WindowsService\WindowsService\obj\Debug\WindowsService.pdb

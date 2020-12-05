@@ -7,7 +7,7 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Threading.Tasks;
 
-namespace WindowsServicGuard
+namespace WindowsServicFolderCopy
 {
     [RunInstaller(true)]
     public partial class Installer1 : Installer
@@ -24,8 +24,8 @@ namespace WindowsServicGuard
 
             processInstaller.Account = ServiceAccount.User;
             serviceInstaller.StartType = ServiceStartMode.Automatic;
-            serviceInstaller.ServiceName = "GuardService";
-            serviceInstaller.DisplayName = "СТРАЖ копирование видео";
+            serviceInstaller.ServiceName = "FolderCopyService";
+            serviceInstaller.DisplayName = "Folder copy service";
             Installers.Add(processInstaller);
             Installers.Add(serviceInstaller);
         }
